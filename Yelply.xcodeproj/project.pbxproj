@@ -19,6 +19,12 @@
 		5883A3A918DC18FA008C8AEB /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5883A39118DC18FA008C8AEB /* UIKit.framework */; };
 		5883A3B118DC18FA008C8AEB /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5883A3AF18DC18FA008C8AEB /* InfoPlist.strings */; };
 		5883A3B318DC18FA008C8AEB /* YelplyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5883A3B218DC18FA008C8AEB /* YelplyTests.m */; };
+		5883A3BF18DC195F008C8AEB /* SearchResultsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5883A3BD18DC195F008C8AEB /* SearchResultsViewController.m */; };
+		5883A3C018DC195F008C8AEB /* SearchResultsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5883A3BE18DC195F008C8AEB /* SearchResultsViewController.xib */; };
+		5883A3C418DC19E1008C8AEB /* ResultCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5883A3C318DC19E1008C8AEB /* ResultCell.m */; };
+		5883A3C718DC19F4008C8AEB /* ResultCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5883A3C618DC19F4008C8AEB /* ResultCell.xib */; };
+		5883A3CB18DC1CBC008C8AEB /* FiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5883A3C918DC1CBC008C8AEB /* FiltersViewController.m */; };
+		5883A3CC18DC1CBC008C8AEB /* FiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5883A3CA18DC1CBC008C8AEB /* FiltersViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +54,15 @@
 		5883A3AE18DC18FA008C8AEB /* YelplyTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "YelplyTests-Info.plist"; sourceTree = "<group>"; };
 		5883A3B018DC18FA008C8AEB /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		5883A3B218DC18FA008C8AEB /* YelplyTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YelplyTests.m; sourceTree = "<group>"; };
+		5883A3BC18DC195F008C8AEB /* SearchResultsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchResultsViewController.h; sourceTree = "<group>"; };
+		5883A3BD18DC195F008C8AEB /* SearchResultsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchResultsViewController.m; sourceTree = "<group>"; };
+		5883A3BE18DC195F008C8AEB /* SearchResultsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchResultsViewController.xib; sourceTree = "<group>"; };
+		5883A3C218DC19E1008C8AEB /* ResultCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResultCell.h; sourceTree = "<group>"; };
+		5883A3C318DC19E1008C8AEB /* ResultCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResultCell.m; sourceTree = "<group>"; };
+		5883A3C618DC19F4008C8AEB /* ResultCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ResultCell.xib; path = ../ResultCell.xib; sourceTree = "<group>"; };
+		5883A3C818DC1CBC008C8AEB /* FiltersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiltersViewController.h; sourceTree = "<group>"; };
+		5883A3C918DC1CBC008C8AEB /* FiltersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FiltersViewController.m; sourceTree = "<group>"; };
+		5883A3CA18DC1CBC008C8AEB /* FiltersViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FiltersViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +122,8 @@
 		5883A39318DC18FA008C8AEB /* Yelply */ = {
 			isa = PBXGroup;
 			children = (
+				5883A3C518DC19E5008C8AEB /* Views */,
+				5883A3C118DC1963008C8AEB /* Controllers */,
 				5883A39C18DC18FA008C8AEB /* AppDelegate.h */,
 				5883A39D18DC18FA008C8AEB /* AppDelegate.m */,
 				5883A39F18DC18FA008C8AEB /* Images.xcassets */,
@@ -142,6 +159,29 @@
 				5883A3AF18DC18FA008C8AEB /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5883A3C118DC1963008C8AEB /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5883A3BC18DC195F008C8AEB /* SearchResultsViewController.h */,
+				5883A3BD18DC195F008C8AEB /* SearchResultsViewController.m */,
+				5883A3BE18DC195F008C8AEB /* SearchResultsViewController.xib */,
+				5883A3C818DC1CBC008C8AEB /* FiltersViewController.h */,
+				5883A3C918DC1CBC008C8AEB /* FiltersViewController.m */,
+				5883A3CA18DC1CBC008C8AEB /* FiltersViewController.xib */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		5883A3C518DC19E5008C8AEB /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5883A3C618DC19F4008C8AEB /* ResultCell.xib */,
+				5883A3C218DC19E1008C8AEB /* ResultCell.h */,
+				5883A3C318DC19E1008C8AEB /* ResultCell.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,6 +261,9 @@
 			files = (
 				5883A39818DC18FA008C8AEB /* InfoPlist.strings in Resources */,
 				5883A3A018DC18FA008C8AEB /* Images.xcassets in Resources */,
+				5883A3CC18DC1CBC008C8AEB /* FiltersViewController.xib in Resources */,
+				5883A3C718DC19F4008C8AEB /* ResultCell.xib in Resources */,
+				5883A3C018DC195F008C8AEB /* SearchResultsViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,7 +282,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5883A3BF18DC195F008C8AEB /* SearchResultsViewController.m in Sources */,
 				5883A39E18DC18FA008C8AEB /* AppDelegate.m in Sources */,
+				5883A3C418DC19E1008C8AEB /* ResultCell.m in Sources */,
+				5883A3CB18DC1CBC008C8AEB /* FiltersViewController.m in Sources */,
 				5883A39A18DC18FA008C8AEB /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,6 +483,7 @@
 				5883A3B818DC18FA008C8AEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5883A3B918DC18FA008C8AEB /* Build configuration list for PBXNativeTarget "YelplyTests" */ = {
 			isa = XCConfigurationList;
@@ -445,6 +492,7 @@
 				5883A3BB18DC18FA008C8AEB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
