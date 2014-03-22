@@ -76,7 +76,6 @@
                     </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="TUc-7L-ksW" firstAttribute="centerY" secondItem="IPb-Hr-EtT" secondAttribute="centerY" id="4DJ-Rq-1hU"/>
                     <constraint firstItem="Duh-wA-2R4" firstAttribute="top" secondItem="V4a-hJ-bUk" secondAttribute="top" constant="8" id="4IO-ar-4GU"/>
                     <constraint firstItem="o4u-Bn-F11" firstAttribute="top" secondItem="TUc-7L-ksW" secondAttribute="bottom" constant="3" id="Bxr-PS-5WJ"/>
                     <constraint firstItem="sOQ-MG-ONN" firstAttribute="top" secondItem="o4u-Bn-F11" secondAttribute="bottom" constant="2" id="F9S-Hl-kdY"/>
