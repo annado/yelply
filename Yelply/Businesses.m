@@ -7,7 +7,33 @@
 //
 
 #import "Businesses.h"
+#import "Business.h"
 
 @implementation Businesses
+
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _data = [[NSArray alloc] init];
+    }
+    return self;
+}
+
+- (NSUInteger)count
+{
+    return [_data count];
+}
+
+- (Business *)get:(NSUInteger)index
+{
+    if (index < [self count]) {
+        NSDictionary *dict = _data[index]; //[_data objectAtIndex:index];
+//        NSLog(@"Business: %@", dict);
+        return [[Business alloc] initWithDictionary:dict];
+    } else {
+        return nil;
+    }
+}
 
 @end

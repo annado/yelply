@@ -6,18 +6,22 @@
 //  Copyright (c) 2014 Anna Do. All rights reserved.
 //
 
-#import "ResultCell.h"
+#import <AFNetworking/UIImageView+AFNetworking.h>
+//#import <UIKit/NSStringDrawings.h>
+#import "BusinessCell.h"
+#import "Business.h"
 
-@interface ResultCell ()
+@interface BusinessCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *priceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reviewsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *ratingsImageView;
 @end
 
-@implementation ResultCell
+@implementation BusinessCell
 
 - (void)awakeFromNib
 {
@@ -30,5 +34,30 @@
     
     // Configure the view for the selected state
 }
+
+- (void)setBusiness:(Business *)business
+{
+    _business = business;
+    self.nameLabel.text = _business.name;
+    self.locationLabel.text = _business.location;
+    self.reviewsLabel.text = [NSString stringWithFormat:@"%@ Reviews", _business.reviews];
+
+    [self.avatarImageView setImageWithURL:_business.imageURL];
+    [self.ratingsImageView setImageWithURL:_business.ratingImageURL];
+}
+
++ (NSInteger)displayHeightForBusiness:(Business *)business
+{
+//    CGSize constraint = CGSizeMake(320, 1000);
+//    CGSize nameSize = [sizeForLabel self.nameLabel];
+    return 101;
+}
+
+//- (CGSize)sizeForLabel:(UILabel *)label
+//{
+//    return [label.text boundingRectWithSize:CGSizeMake(221.f, 1000)
+//                options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
+//                context:nil];
+//}
 
 @end

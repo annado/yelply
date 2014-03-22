@@ -7,9 +7,17 @@
 //
 
 #import "SearchResultsViewController.h"
-#import "ResultCell.h"
+#import "BusinessCell.h"
+#import "YelpClient.h"
+#import "Businesses.h"
+
+NSString * const kYelpConsumerKey = @"Shz-PUyzD8l3vb6CioUi0w";
+NSString * const kYelpConsumerSecret = @"xyQsjADqZTLkMdFmA1aFg7oFp8k";
+NSString * const kYelpToken = @"JnN_owWaTAKTfOlZgk7uV6X1eXBige-h";
+NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 
 @interface SearchResultsViewController ()
+@property (nonatomic, strong) YelpClient *client;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @end
@@ -20,7 +28,15 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.results = [[Businesses alloc] init];
+        self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
+        
+        [self.client searchWithTerm:@"Thai" success:^(AFHTTPRequestOperation *operation, id response) {
+            self.results.data = response[@"businesses"];
+            [self.tableView reloadData];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"error: %@", [error description]);
+        }];
     }
     return self;
 }
@@ -30,7 +46,7 @@
     [super viewDidLoad];
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
-    [self.tableView registerNib:[UINib nibWithNibName:@"ResultCell" bundle:nil] forCellReuseIdentifier:@"ResultCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"BusinessCell" bundle:nil] forCellReuseIdentifier:@"BusinessCell"];
 
 }
 
@@ -38,13 +54,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return [self.results count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"ResultCell";
-    ResultCell *cell = (ResultCell *)[self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"BusinessCell";
+    BusinessCell *cell = (BusinessCell *)[self.tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    cell.business = [_results get:indexPath.row];
     return cell;
 }
 
@@ -57,5 +74,10 @@
 //    [[self navigationController] pushViewController:movieController animated:YES];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    Business *business = [_results get:indexPath.row];
+    return [BusinessCell displayHeightForBusiness:business];
+}
 
 @end

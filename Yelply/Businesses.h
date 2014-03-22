@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Businesses : NSObject
+@class Business;
 
+@interface Businesses : NSObject
+@property (nonatomic, strong) NSArray *data;
+- (NSUInteger)count;
+- (Business *)get:(NSUInteger)index;
 @end

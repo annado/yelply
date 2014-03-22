@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class Businesses;
+
 @interface SearchResultsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic, strong) Businesses *results;
 
 @end

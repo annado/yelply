@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ResultCell : UITableViewCell
+@class Business;
 
+@interface BusinessCell : UITableViewCell
+@property (nonatomic, strong) Business *business;
++ (NSInteger)displayHeightForBusiness:(Business *)business;
 @end
