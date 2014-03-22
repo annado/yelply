@@ -7,10 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FiltersViewController.h"
 
 @class Businesses;
+@class Filters;
 
-@interface SearchResultsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface SearchResultsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, FiltersSetDelegate>
 @property (nonatomic, strong) Businesses *results;
-
+@property (nonatomic, strong) Filters *filters;
 @end

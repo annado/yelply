@@ -11,6 +11,7 @@
 #import "BusinessCell.h"
 #import "YelpClient.h"
 #import "Businesses.h"
+#import "Filters.h"
 
 NSString * const kYelpConsumerKey = @"Shz-PUyzD8l3vb6CioUi0w";
 NSString * const kYelpConsumerSecret = @"xyQsjADqZTLkMdFmA1aFg7oFp8k";
@@ -30,10 +31,12 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.title = @"Yelply";
-
+        
         // Configure the filter button
         UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"FilterIcon"] style:UIBarButtonItemStylePlain target:self action:@selector(onFilterButton:)];
         self.navigationItem.rightBarButtonItem = filterButton;
+        
+        _filters = [[Filters alloc] init];
         
         self.results = [[Businesses alloc] init];
         self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
@@ -51,7 +54,8 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 - (void)onFilterButton:(UIBarButtonItem *)button
 {
     FiltersViewController *filtersViewController = [[FiltersViewController alloc] init];
-    filtersViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    filtersViewController.filters = _filters;
+    filtersViewController.delegate = self;
     [self.navigationController pushViewController:filtersViewController animated:YES];
 }
 
@@ -63,6 +67,17 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     [self.tableView registerNib:[UINib nibWithNibName:@"BusinessCell" bundle:nil] forCellReuseIdentifier:@"BusinessCell"];
 
 }
+
+#pragma mark - FiltersSetDelegate methods
+- (void)filtersViewController:(FiltersViewController *)filtersViewController
+                didSetFilters:(Filters *)filters
+{
+    NSLog(@"Updated filters!");
+
+    _filters = filtersViewController.filters;
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 
 #pragma mark - UITableViewController methods
 

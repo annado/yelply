@@ -38,6 +38,7 @@
 - (void)onSearchButton:(UIBarButtonItem *)button
 {
     NSLog(@"Search!");
+    [self.delegate filtersViewController:self didSetFilters:_filters];
 }
 
 - (void)viewDidLoad
@@ -136,3 +137,4 @@
 */
 
 @end
+
