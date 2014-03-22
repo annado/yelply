@@ -14,6 +14,32 @@
 
 @implementation FiltersViewController
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        self.title = @"Filters";
+        
+        // Configure the Search button
+        UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(onSearchButton:)];
+        self.navigationItem.rightBarButtonItem = searchButton;
+        
+        // Configure the Cancel button
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Cancel" style:UIBarButtonItemStylePlain target:self action:@selector(onCancel:)];
+    }
+    return self;
+}
+
+- (void)onCancel:(UIBarButtonItem *)button
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)onSearchButton:(UIBarButtonItem *)button
+{
+    NSLog(@"Search!");
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

@@ -7,6 +7,7 @@
 //
 
 #import "SearchResultsViewController.h"
+#import "FiltersViewController.h"
 #import "BusinessCell.h"
 #import "YelpClient.h"
 #import "Businesses.h"
@@ -28,6 +29,12 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.title = @"Yelply";
+
+        // Configure the filter button
+        UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"FilterIcon"] style:UIBarButtonItemStylePlain target:self action:@selector(onFilterButton:)];
+        self.navigationItem.rightBarButtonItem = filterButton;
+        
         self.results = [[Businesses alloc] init];
         self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
         
@@ -39,6 +46,13 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
         }];
     }
     return self;
+}
+
+- (void)onFilterButton:(UIBarButtonItem *)button
+{
+    FiltersViewController *filtersViewController = [[FiltersViewController alloc] init];
+    filtersViewController.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+    [self.navigationController pushViewController:filtersViewController animated:YES];
 }
 
 - (void)viewDidLoad
