@@ -6,6 +6,7 @@
 //  Copyright (c) 2014 Anna Do. All rights reserved.
 //
 
+#import <SVProgressHUD/SVProgressHUD.h>
 #import "SearchResultsViewController.h"
 #import "FiltersViewController.h"
 #import "BusinessCell.h"
@@ -21,7 +22,7 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 @interface SearchResultsViewController ()
 @property (nonatomic, strong) YelpClient *client;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 @end
 
 @implementation SearchResultsViewController
@@ -41,14 +42,29 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
         self.results = [[Businesses alloc] init];
         self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
         
-        [self.client searchWithTerm:@"Thai" success:^(AFHTTPRequestOperation *operation, id response) {
-            self.results.data = response[@"businesses"];
-            [self.tableView reloadData];
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"error: %@", [error description]);
-        }];
+        
     }
     return self;
+}
+
+- (void)search
+{
+    NSDictionary *parameters = @{
+                                 @"term" : @"Thai",
+                                 @"sort" : _filters.sort,
+                                 @"location" : @"San Francisco"
+                                 };
+    
+    [self.client searchWithParameters:parameters success:^(AFHTTPRequestOperation *operation, id response) {
+        self.results.data = response[@"businesses"];
+        [SVProgressHUD dismiss];
+        [self.refreshControl endRefreshing];
+        [self.tableView reloadData];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error: %@", [error description]);
+        [SVProgressHUD dismiss];
+        [self.refreshControl endRefreshing];
+    }];
 }
 
 - (void)onFilterButton:(UIBarButtonItem *)button
@@ -66,6 +82,15 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     self.tableView.delegate = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"BusinessCell" bundle:nil] forCellReuseIdentifier:@"BusinessCell"];
 
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+    [self search];
+
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(search)
+             forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
+    self.refreshControl = refreshControl;
+
 }
 
 #pragma mark - FiltersSetDelegate methods
@@ -75,6 +100,8 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     NSLog(@"Updated filters!");
 
     _filters = filtersViewController.filters;
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+    [self search];
     [self.navigationController popViewControllerAnimated:YES];
 }
 

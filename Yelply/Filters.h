@@ -9,5 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface Filters : NSObject
-
+@property (nonatomic, strong) NSMutableDictionary *dictionary;
+@property (nonatomic, strong) NSString *sort;
 @end

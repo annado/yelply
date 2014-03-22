@@ -10,4 +10,14 @@
 
 @implementation Filters
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        _dictionary = [[NSMutableDictionary alloc] init];
+        _sort = @"0";
+    }
+    return self;
+}
+
 @end
