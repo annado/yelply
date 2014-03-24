@@ -15,13 +15,19 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="GWf-6z-MNy">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="GWf-6z-MNy">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="GWf-6z-MNy" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="OOi-TH-OqB"/>
+                <constraint firstAttribute="trailing" secondItem="GWf-6z-MNy" secondAttribute="trailing" id="WOt-Cs-5x1"/>
+                <constraint firstItem="GWf-6z-MNy" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="cDB-NZ-jLH"/>
+                <constraint firstAttribute="bottom" secondItem="GWf-6z-MNy" secondAttribute="bottom" id="uhh-RX-Kn5"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>

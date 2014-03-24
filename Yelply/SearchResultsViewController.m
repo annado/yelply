@@ -62,7 +62,8 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     NSDictionary *parameters = @{
                                  @"term" : self.searchTerm,
                                  @"sort" : _filters.sort,
-                                 @"location" : @"San Francisco"
+                                 @"location" : @"San Francisco",
+                                 @"deals_filter" : _filters.offeringDeals ? @"true" : @"false"
                                  };
     
     [self.client searchWithParameters:parameters success:^(AFHTTPRequestOperation *operation, id response) {
@@ -88,6 +89,7 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     FiltersViewController *filtersViewController = [[FiltersViewController alloc] init];
     filtersViewController.filters = _filters;
     filtersViewController.delegate = self;
+    // TODO: use presenting view controller model instead https://developer.apple.com/library/ios/featuredarticles/ViewControllerPGforiPhoneOS/ModalViewControllers/ModalViewControllers.html
     [self.navigationController pushViewController:filtersViewController animated:YES];
 }
 
@@ -101,7 +103,7 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     [self.tableView registerNib:[UINib nibWithNibName:@"BusinessCell" bundle:nil] forCellReuseIdentifier:@"BusinessCell"];
 
     // start search
-    [self load];
+    [self search];
 
     // add RefreshControl
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];

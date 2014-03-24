@@ -20,6 +20,8 @@
     navController.navigationBar.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                                            [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0], NSFontAttributeName, nil]];
+
+    [[UITableViewCell appearance] setTintColor:[UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1]];
     self.window.rootViewController = navController;
 
     self.window.backgroundColor = [UIColor whiteColor];

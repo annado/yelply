@@ -7,9 +7,16 @@
 //
 
 #import "FiltersViewController.h"
+#import "Filters.h"
+
+static NSInteger SectionSort = 0;
+static NSInteger SectionRadius = 1;
+static NSInteger SectionDeals = 2;
+static NSInteger SectionCategories = 3;
 
 @interface FiltersViewController ()
-
+@property (nonatomic, assign) BOOL sortExpanded;
+@property (nonatomic, assign) BOOL radiusExpanded;
 @end
 
 @implementation FiltersViewController
@@ -19,9 +26,11 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.title = @"Filters";
+        self.sortExpanded = NO;
+        self.radiusExpanded = NO;
         
         // Configure the Search button
-        UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(onSearchButton:)];
+        UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:self action:@selector(onSearchButton:)];
         self.navigationItem.rightBarButtonItem = searchButton;
         
         // Configure the Cancel button
@@ -30,26 +39,12 @@
     return self;
 }
 
-- (void)onCancel:(UIBarButtonItem *)button
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)onSearchButton:(UIBarButtonItem *)button
-{
-    NSLog(@"Search!");
-    [self.delegate filtersViewController:self didSetFilters:_filters];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    // Customize switches
+    [[UISwitch appearance] setOnTintColor:[UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -58,66 +53,129 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - Filter change events
+- (void)onCancel:(UIBarButtonItem *)button
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)onSearchButton:(UIBarButtonItem *)button
+{
+    [self filtersUpdated];
+}
+
+- (void)onSwitchDeal:(UISwitch *)switchView
+{
+    _filters.offeringDeals = switchView.on;
+}
+
+- (void)filtersUpdated
+{
+    [self.delegate filtersViewController:self didSetFilters:_filters];
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 0;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    return 0;
+    if (section == SectionCategories) {
+        return [_filters.categories count];
+    }
+    else if (section == SectionSort) {
+        return (self.sortExpanded) ? 3 : 1;
+    } else if (section == SectionRadius) {
+        return (self.radiusExpanded) ? 3 : 1;
+    } else {
+        return 1;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"reuseIdentifier" forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"FilterCell";
+    static NSString *DealsCellIdentifier = @"DealsCell";
+    static NSString *CategoryCellIdentifier = @"CategoryCell";
+    
+    UITableViewCell *cell;
     
     // Configure the cell...
+    if (indexPath.section == SectionSort) {
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (nil == cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        cell.textLabel.text = [_filters.sortDictionary objectForKey:_filters.sort];
+        UIImageView *arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DownArrow"]];
+        arrowView.image = [arrowView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        arrowView.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
+        cell.accessoryView = arrowView;
+    } else if (indexPath.section == 1) {
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (nil == cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        cell.textLabel.text = @"Radius...";
+        UIImageView *arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DownArrow"]];
+        arrowView.image = [arrowView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        arrowView.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
+        cell.accessoryView = arrowView;
+    } else if (indexPath.section == 2) {
+        cell = [tableView dequeueReusableCellWithIdentifier:DealsCellIdentifier];
+        if (nil == cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DealsCellIdentifier];
+        }
+        [self setDealsCell:cell];
+    } else if (indexPath.section == 3) {
+        cell = [tableView dequeueReusableCellWithIdentifier:CategoryCellIdentifier];
+        if (nil == cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CategoryCellIdentifier];
+        }
+        cell.textLabel.text = [_filters.categories objectAtIndex:indexPath.row];
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }
     
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+//- (UITableView *)cellDequeuedWithIdentifier:(NSString *)identifier
+//{
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+//    if (nil == cell) {
+//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+//    }
+//}
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    if (indexPath.section == SectionSort) {
+        self.sortExpanded = !self.sortExpanded;
+        [tableView reloadData];
+    } else if (indexPath.section == SectionRadius) {
+        self.radiusExpanded = !self.radiusExpanded;
+        [tableView reloadData];
+    }
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return [_filters.sectionTitles objectAtIndex:section];
 }
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+#pragma mark - Setup cell views
+- (void)setDealsCell:(UITableViewCell *)cell
 {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
+    cell.textLabel.text = @"Offering a Deal";
+    UISwitch *switchView = [[UISwitch alloc] init];
+    switchView.on = _filters.offeringDeals;
+    [switchView addTarget:self action:@selector(onSwitchDeal:) forControlEvents:UIControlEventValueChanged];
+    cell.accessoryView = switchView;
 }
-*/
 
 /*
 #pragma mark - Table view delegate
