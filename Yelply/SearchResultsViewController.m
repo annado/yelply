@@ -33,10 +33,19 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.title = @"Yelply";
+        self.searchTerm = @"Thai";
         
         // Configure the filter button
         UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"FilterIcon"] style:UIBarButtonItemStylePlain target:self action:@selector(onFilterButton:)];
         self.navigationItem.rightBarButtonItem = filterButton;
+        
+        // Configure title
+        UISearchBar *searchBar = [[UISearchBar alloc] init];
+        searchBar.delegate = self;
+        searchBar.text = self.searchTerm;
+
+        //        UIView *iv = [[UIView alloc] initWithFrame:CGRectMake(0,0,32,32)];
+        self.navigationItem.titleView = searchBar;
         
         _filters = [[Filters alloc] init];
         
@@ -48,10 +57,10 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     return self;
 }
 
-- (void)search
+- (void)load
 {
     NSDictionary *parameters = @{
-                                 @"term" : @"Thai",
+                                 @"term" : self.searchTerm,
                                  @"sort" : _filters.sort,
                                  @"location" : @"San Francisco"
                                  };
@@ -142,6 +151,23 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 {
     Business *business = [_results get:indexPath.row];
     return [BusinessCell displayHeightForBusiness:business];
+}
+
+#pragma mark - UISearchBarDelegate methods
+
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    NSLog(@"searchBarTextDidEndEditing");
+//    self.searchTerm = searchBar.text;
+//    [self search];
+}
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    NSLog(@"searchBarSearchButtonClicked");
+    [searchBar resignFirstResponder];
+    self.searchTerm = searchBar.text;
+    [self search];
 }
 
 @end
