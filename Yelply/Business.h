@@ -15,4 +15,5 @@
 @property (nonatomic, strong) NSURL *ratingImageURL;
 @property (nonatomic, assign) NSString *reviews;
 @property (nonatomic, strong) NSURL *imageURL;
+@property (nonatomic, strong) NSString *category;
 @end

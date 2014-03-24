@@ -23,6 +23,7 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 @property (nonatomic, strong) YelpClient *client;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, strong) UIRefreshControl *refreshControl;
+@property (nonatomic, strong) NSString *searchTerm;
 @end
 
 @implementation SearchResultsViewController
@@ -67,6 +68,12 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     }];
 }
 
+- (void)search
+{
+    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
+    [self load];
+}
+
 - (void)onFilterButton:(UIBarButtonItem *)button
 {
     FiltersViewController *filtersViewController = [[FiltersViewController alloc] init];
@@ -78,19 +85,21 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    // setup tableview
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"BusinessCell" bundle:nil] forCellReuseIdentifier:@"BusinessCell"];
 
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
-    [self search];
+    // start search
+    [self load];
 
+    // add RefreshControl
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(search)
              forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     self.refreshControl = refreshControl;
-
 }
 
 #pragma mark - FiltersSetDelegate methods
@@ -100,7 +109,6 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     NSLog(@"Updated filters!");
 
     _filters = filtersViewController.filters;
-    [SVProgressHUD showWithMaskType:SVProgressHUDMaskTypeBlack];
     [self search];
     [self.navigationController popViewControllerAnimated:YES];
 }

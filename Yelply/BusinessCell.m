@@ -44,6 +44,7 @@
 
     [self.avatarImageView setImageWithURL:_business.imageURL];
     [self.ratingsImageView setImageWithURL:_business.ratingImageURL];
+    self.categoryLabel.text = _business.category;
 }
 
 + (NSInteger)displayHeightForBusiness:(Business *)business

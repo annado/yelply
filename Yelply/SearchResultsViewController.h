@@ -12,7 +12,7 @@
 @class Businesses;
 @class Filters;
 
-@interface SearchResultsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, FiltersSetDelegate>
+@interface SearchResultsViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, FiltersSetDelegate>
 @property (nonatomic, strong) Businesses *results;
 @property (nonatomic, strong) Filters *filters;
 @end
