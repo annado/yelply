@@ -106,8 +106,6 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 - (void)filtersViewController:(FiltersViewController *)filtersViewController
                 didSetFilters:(Filters *)filters
 {
-    NSLog(@"Updated filters!");
-
     _filters = filtersViewController.filters;
     [self search];
     [self.navigationController popViewControllerAnimated:YES];

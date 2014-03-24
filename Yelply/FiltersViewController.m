@@ -89,9 +89,9 @@ static NSInteger SectionCategories = 3;
         return [_filters.categories count];
     }
     else if (section == SectionSort) {
-        return (self.sortExpanded) ? [_filters.sortOptions count] : 1;
+        return (self.sortExpanded) ? (1 + [_filters.sortOptions count]) : 1;
     } else if (section == SectionRadius) {
-        return (self.radiusExpanded) ? [_filters.radiusOptions count] : 1;
+        return (self.radiusExpanded) ? (1 + [_filters.radiusOptions count]) : 1;
     } else {
         return 1;
     }
@@ -127,6 +127,9 @@ static NSInteger SectionCategories = 3;
             
             NSInteger index = indexPath.row - 1;
             cell.textLabel.text = [_filters.sortOptions objectAtIndex:index];
+            if (_filters.sort == index) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
         }
         
     } else if (indexPath.section == 1) {
@@ -149,6 +152,10 @@ static NSInteger SectionCategories = 3;
             
             NSInteger index = indexPath.row - 1;
             cell.textLabel.text = [NSString stringWithFormat:@"%@ m", [_filters.radiusOptions objectAtIndex:index]];
+            if (_filters.radius == index) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }
+
         }
     } else if (indexPath.section == 2) {
         cell = [tableView dequeueReusableCellWithIdentifier:DealsCellIdentifier];
