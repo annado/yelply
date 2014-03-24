@@ -34,37 +34,26 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     if (self) {
         self.title = @"Yelply";
         self.searchTerm = @"Thai";
+        _filters = [[Filters alloc] init];
+        self.results = [[Businesses alloc] init];
+        self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
         
         // Configure the filter button
         UIBarButtonItem *filterButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"FilterIcon"] style:UIBarButtonItemStylePlain target:self action:@selector(onFilterButton:)];
         self.navigationItem.rightBarButtonItem = filterButton;
         
-        // Configure title
+        // Configure search bar
         UISearchBar *searchBar = [[UISearchBar alloc] init];
         searchBar.delegate = self;
         searchBar.text = self.searchTerm;
-
-        //        UIView *iv = [[UIView alloc] initWithFrame:CGRectMake(0,0,32,32)];
         self.navigationItem.titleView = searchBar;
-        
-        _filters = [[Filters alloc] init];
-        
-        self.results = [[Businesses alloc] init];
-        self.client = [[YelpClient alloc] initWithConsumerKey:kYelpConsumerKey consumerSecret:kYelpConsumerSecret accessToken:kYelpToken accessSecret:kYelpTokenSecret];
-        
-        
     }
     return self;
 }
 
 - (void)load
 {
-    NSDictionary *parameters = @{
-                                 @"term" : self.searchTerm,
-                                 @"sort" : _filters.sort,
-                                 @"location" : @"San Francisco",
-                                 @"deals_filter" : _filters.offeringDeals ? @"true" : @"false"
-                                 };
+    NSDictionary *parameters = [_filters getParametersWithTerm:self.searchTerm];
     
     [self.client searchWithParameters:parameters success:^(AFHTTPRequestOperation *operation, id response) {
         self.results.data = response[@"businesses"];

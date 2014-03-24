@@ -89,9 +89,9 @@ static NSInteger SectionCategories = 3;
         return [_filters.categories count];
     }
     else if (section == SectionSort) {
-        return (self.sortExpanded) ? 3 : 1;
+        return (self.sortExpanded) ? [_filters.sortOptions count] : 1;
     } else if (section == SectionRadius) {
-        return (self.radiusExpanded) ? 3 : 1;
+        return (self.radiusExpanded) ? [_filters.radiusOptions count] : 1;
     } else {
         return 1;
     }
@@ -100,6 +100,7 @@ static NSInteger SectionCategories = 3;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"FilterCell";
+    static NSString *FilterCellIdentifier = @"FilterHeaderCell";
     static NSString *DealsCellIdentifier = @"DealsCell";
     static NSString *CategoryCellIdentifier = @"CategoryCell";
     
@@ -107,25 +108,48 @@ static NSInteger SectionCategories = 3;
     
     // Configure the cell...
     if (indexPath.section == SectionSort) {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (nil == cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        if (indexPath.row == 0) {
+            cell = [tableView dequeueReusableCellWithIdentifier:FilterCellIdentifier];
+            if (nil == cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FilterCellIdentifier];
+            }
+            
+            cell.textLabel.text = [_filters.sortOptions objectAtIndex:_filters.sort];
+            UIImageView *arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DownArrow"]];
+            arrowView.image = [arrowView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            arrowView.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
+            cell.accessoryView = arrowView;
+        } else {
+            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (nil == cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            }
+            
+            NSInteger index = indexPath.row - 1;
+            cell.textLabel.text = [_filters.sortOptions objectAtIndex:index];
         }
-        cell.textLabel.text = [_filters.sortDictionary objectForKey:_filters.sort];
-        UIImageView *arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DownArrow"]];
-        arrowView.image = [arrowView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        arrowView.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
-        cell.accessoryView = arrowView;
+        
     } else if (indexPath.section == 1) {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (nil == cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        if (indexPath.row == 0) {
+
+            cell = [tableView dequeueReusableCellWithIdentifier:FilterCellIdentifier];
+            if (nil == cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FilterCellIdentifier];
+            }
+            cell.textLabel.text = [NSString stringWithFormat:@"%@ m", [_filters.radiusOptions objectAtIndex:_filters.radius]];
+            UIImageView *arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DownArrow"]];
+            arrowView.image = [arrowView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            arrowView.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
+            cell.accessoryView = arrowView;
+        } else {
+            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (nil == cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            }
+            
+            NSInteger index = indexPath.row - 1;
+            cell.textLabel.text = [NSString stringWithFormat:@"%@ m", [_filters.radiusOptions objectAtIndex:index]];
         }
-        cell.textLabel.text = @"Radius...";
-        UIImageView *arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DownArrow"]];
-        arrowView.image = [arrowView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        arrowView.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
-        cell.accessoryView = arrowView;
     } else if (indexPath.section == 2) {
         cell = [tableView dequeueReusableCellWithIdentifier:DealsCellIdentifier];
         if (nil == cell) {
@@ -144,21 +168,19 @@ static NSInteger SectionCategories = 3;
     return cell;
 }
 
-//- (UITableView *)cellDequeuedWithIdentifier:(NSString *)identifier
-//{
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
-//    if (nil == cell) {
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
-//    }
-//}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == SectionSort) {
         self.sortExpanded = !self.sortExpanded;
+        if (indexPath.row > 0) {
+            _filters.sort = indexPath.row - 1;
+        }
         [tableView reloadData];
     } else if (indexPath.section == SectionRadius) {
         self.radiusExpanded = !self.radiusExpanded;
+        if (indexPath.row > 0) {
+            _filters.radius = indexPath.row - 1;
+        }
         [tableView reloadData];
     }
 }
@@ -176,23 +198,6 @@ static NSInteger SectionCategories = 3;
     [switchView addTarget:self action:@selector(onSwitchDeal:) forControlEvents:UIControlEventValueChanged];
     cell.accessoryView = switchView;
 }
-
-/*
-#pragma mark - Table view delegate
-
-// In a xib-based application, navigation from a table can be handled in -tableView:didSelectRowAtIndexPath:
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here, for example:
-    // Create the next view controller.
-    <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:<#@"Nib name"#> bundle:nil];
-    
-    // Pass the selected object to the new view controller.
-    
-    // Push the view controller.
-    [self.navigationController pushViewController:detailViewController animated:YES];
-}
-*/
 
 @end
 
