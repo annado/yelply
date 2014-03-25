@@ -43,6 +43,10 @@ static NSInteger SectionCategories = 3;
 {
     [super viewDidLoad];
     
+    // Setup TableView
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    
     // Customize switches
     [[UISwitch appearance] setOnTintColor:[UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1]];
 }
@@ -78,7 +82,6 @@ static NSInteger SectionCategories = 3;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 4;
 }
 
@@ -99,28 +102,19 @@ static NSInteger SectionCategories = 3;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"FilterValueCell";
-    static NSString *FilterCellIdentifier = @"FilterDropdownCell";
-    static NSString *DealsCellIdentifier = @"FilterSwitchCell";
-//    static NSString *CategoryCellIdentifier = @"FilterCategoryCell";
+    static NSString *DropdownCellIdentifier = @"FilterDropdownCell";
+    static NSString *SwitchCellIdentifier = @"FilterSwitchCell";
     
     UITableViewCell *cell;
     
     // Configure the cell...
     if (indexPath.section == SectionSort) {
         if (indexPath.row == 0) {
-            cell = [tableView dequeueReusableCellWithIdentifier:FilterCellIdentifier];
-            if (nil == cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FilterCellIdentifier];
-            }
-            
+            cell = [self dequeueReusableCellWithIdentifier:DropdownCellIdentifier];
             cell.textLabel.text = [_filters.sortOptions objectAtIndex:_filters.sort];
             [self addMenuAccessoryView:cell];
         } else {
-            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (nil == cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            }
-            
+            cell = [self dequeueReusableCellWithIdentifier:CellIdentifier];
             NSInteger index = indexPath.row - 1;
             cell.textLabel.text = [_filters.sortOptions objectAtIndex:index];
             if (_filters.sort == index) {
@@ -129,22 +123,13 @@ static NSInteger SectionCategories = 3;
                 cell.accessoryType = UITableViewCellAccessoryNone;
             }
         }
-        
     } else if (indexPath.section == SectionRadius) {
         if (indexPath.row == 0) {
-
-            cell = [tableView dequeueReusableCellWithIdentifier:FilterCellIdentifier];
-            if (nil == cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FilterCellIdentifier];
-            }
+            cell = [self dequeueReusableCellWithIdentifier:DropdownCellIdentifier];
             cell.textLabel.text = [_filters labelForRadiusAtIndex:_filters.radius];
             [self addMenuAccessoryView:cell];
         } else {
-            cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-            if (nil == cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            }
-            
+            cell = [self dequeueReusableCellWithIdentifier:CellIdentifier];
             NSInteger index = indexPath.row - 1;
             cell.textLabel.text = [_filters labelForRadiusAtIndex:index];
             if (_filters.radius == index) {
@@ -154,20 +139,24 @@ static NSInteger SectionCategories = 3;
             }
         }
     } else if (indexPath.section == SectionDeals) {
-        cell = [tableView dequeueReusableCellWithIdentifier:DealsCellIdentifier];
-        if (nil == cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DealsCellIdentifier];
-        }
-        [self setDealsCell:cell];
+        cell = [self dequeueReusableCellWithIdentifier:SwitchCellIdentifier];
+        cell.textLabel.text = @"Offering a Deal";
+        [self addSwitchAccessoryView:cell];
     } else if (indexPath.section == SectionCategories) {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (nil == cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        }
+        cell = [self dequeueReusableCellWithIdentifier:CellIdentifier];
         cell.textLabel.text = [_filters.categories objectAtIndex:indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
     }
     
+    return cell;
+}
+
+- (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier
+{
+    UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:identifier];
+    if (nil == cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+    }
     return cell;
 }
 
@@ -193,9 +182,8 @@ static NSInteger SectionCategories = 3;
 }
 
 #pragma mark - Setup cell views
-- (void)setDealsCell:(UITableViewCell *)cell
+- (void)addSwitchAccessoryView:(UITableViewCell *)cell
 {
-    cell.textLabel.text = @"Offering a Deal";
     UISwitch *switchView = [[UISwitch alloc] init];
     switchView.on = _filters.offeringDeals;
     [switchView addTarget:self action:@selector(onSwitchDeal:) forControlEvents:UIControlEventValueChanged];

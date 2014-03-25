@@ -47,18 +47,19 @@
     self.categoryLabel.text = _business.category;
 }
 
+static NSInteger NameLabelMaxWidth = 183;
+static NSInteger ReviewsLabelHeight = 15;
+static NSInteger LocationLabelHeight = 15;
+static NSInteger CategoryLabelHeight = 15;
+static NSInteger CellVerticalPadding = 24;
+
 + (NSInteger)displayHeightForBusiness:(Business *)business
 {
-//    CGSize constraint = CGSizeMake(320, 1000);
-//    CGSize nameSize = [sizeForLabel self.nameLabel];
-    return 101;
-}
+    NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:13],NSFontAttributeName, nil];
+    NSInteger nameHeight = [business.name boundingRectWithSize:CGSizeMake(NameLabelMaxWidth, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:attributes context:nil].size.height;
 
-//- (CGSize)sizeForLabel:(UILabel *)label
-//{
-//    return [label.text boundingRectWithSize:CGSizeMake(221.f, 1000)
-//                options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
-//                context:nil];
-//}
+    NSInteger height = nameHeight + ReviewsLabelHeight + LocationLabelHeight + CategoryLabelHeight + CellVerticalPadding;
+    return (height > 91) ? height : 91;
+}
 
 @end
