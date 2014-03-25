@@ -145,7 +145,7 @@ static NSInteger MinCategoriesVisible = 3;
         cell.textLabel.text = @"Offering a Deal";
         [self addSwitchAccessoryView:cell];
     } else if (indexPath.section == SectionCategories) {
-        if (!self.categoriesExpanded && indexPath.row == MinCategoriesVisible) {
+        if ([self isCategorySeeAllForIndexPath:indexPath]) {
             cell = [self dequeueReusableCellWithIdentifier:DropdownCellIdentifier];
             cell.textLabel.text = @"See All";
             [self addMenuAccessoryView:cell];
@@ -157,6 +157,11 @@ static NSInteger MinCategoriesVisible = 3;
     }
     
     return cell;
+}
+
+- (BOOL)isCategorySeeAllForIndexPath:(NSIndexPath *)indexPath
+{
+    return !self.categoriesExpanded && indexPath.row == MinCategoriesVisible;
 }
 
 - (UITableViewCell *)dequeueReusableCellWithIdentifier:(NSString *)identifier
@@ -174,6 +179,7 @@ static NSInteger MinCategoriesVisible = 3;
 
     if (indexPath.section == SectionSort) {
         if (indexPath.row > 0) { // not the header row
+            // TODO: hook this into Filters model
             cell.accessoryType = (cell.accessoryType == UITableViewCellAccessoryNone) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
 
@@ -185,6 +191,7 @@ static NSInteger MinCategoriesVisible = 3;
 
     } else if (indexPath.section == SectionRadius) {
         if (indexPath.row > 0) { // not the header row
+            // TODO: hook this into Filters model
             cell.accessoryType = (cell.accessoryType == UITableViewCellAccessoryNone) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         self.radiusExpanded = !self.radiusExpanded;
@@ -195,11 +202,12 @@ static NSInteger MinCategoriesVisible = 3;
     } else if (indexPath.section == SectionCategories) {
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
 
-        if (!self.categoriesExpanded && indexPath.row == MinCategoriesVisible) {
+        if ([self isCategorySeeAllForIndexPath:indexPath]) {
+            // toggle See All
             self.categoriesExpanded = !self.categoriesExpanded;
             [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionCategories] withRowAnimation:UITableViewRowAnimationFade];
         } else {
-            // TODO: implement category selection
+            // TODO: implement category selection in Filters model
             UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
             if (cell.accessoryType == UITableViewCellAccessoryNone) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
