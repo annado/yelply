@@ -60,6 +60,11 @@
     return [_radiusOptions objectAtIndex:_radius];
 }
 
+- (NSString *)labelForRadiusAtIndex:(NSInteger)index
+{
+    return [NSString stringWithFormat:@"%@ m", [_radiusOptions objectAtIndex:index]];
+}
+
 - (NSString *)getSortFilter {
     return [NSString stringWithFormat:@"%ld", (long)_sort];
 }

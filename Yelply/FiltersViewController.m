@@ -87,8 +87,7 @@ static NSInteger SectionCategories = 3;
     // Return the number of rows in the section.
     if (section == SectionCategories) {
         return [_filters.categories count];
-    }
-    else if (section == SectionSort) {
+    } else if (section == SectionSort) {
         return (self.sortExpanded) ? (1 + [_filters.sortOptions count]) : 1;
     } else if (section == SectionRadius) {
         return (self.radiusExpanded) ? (1 + [_filters.radiusOptions count]) : 1;
@@ -99,10 +98,10 @@ static NSInteger SectionCategories = 3;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"FilterCell";
-    static NSString *FilterCellIdentifier = @"FilterHeaderCell";
-    static NSString *DealsCellIdentifier = @"DealsCell";
-    static NSString *CategoryCellIdentifier = @"CategoryCell";
+    static NSString *CellIdentifier = @"FilterValueCell";
+    static NSString *FilterCellIdentifier = @"FilterDropdownCell";
+    static NSString *DealsCellIdentifier = @"FilterSwitchCell";
+//    static NSString *CategoryCellIdentifier = @"FilterCategoryCell";
     
     UITableViewCell *cell;
     
@@ -115,10 +114,7 @@ static NSInteger SectionCategories = 3;
             }
             
             cell.textLabel.text = [_filters.sortOptions objectAtIndex:_filters.sort];
-            UIImageView *arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DownArrow"]];
-            arrowView.image = [arrowView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            arrowView.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
-            cell.accessoryView = arrowView;
+            [self addMenuAccessoryView:cell];
         } else {
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (nil == cell) {
@@ -129,21 +125,20 @@ static NSInteger SectionCategories = 3;
             cell.textLabel.text = [_filters.sortOptions objectAtIndex:index];
             if (_filters.sort == index) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            } else {
+                cell.accessoryType = UITableViewCellAccessoryNone;
             }
         }
         
-    } else if (indexPath.section == 1) {
+    } else if (indexPath.section == SectionRadius) {
         if (indexPath.row == 0) {
 
             cell = [tableView dequeueReusableCellWithIdentifier:FilterCellIdentifier];
             if (nil == cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:FilterCellIdentifier];
             }
-            cell.textLabel.text = [NSString stringWithFormat:@"%@ m", [_filters.radiusOptions objectAtIndex:_filters.radius]];
-            UIImageView *arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DownArrow"]];
-            arrowView.image = [arrowView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            arrowView.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
-            cell.accessoryView = arrowView;
+            cell.textLabel.text = [_filters labelForRadiusAtIndex:_filters.radius];
+            [self addMenuAccessoryView:cell];
         } else {
             cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
             if (nil == cell) {
@@ -151,22 +146,23 @@ static NSInteger SectionCategories = 3;
             }
             
             NSInteger index = indexPath.row - 1;
-            cell.textLabel.text = [NSString stringWithFormat:@"%@ m", [_filters.radiusOptions objectAtIndex:index]];
+            cell.textLabel.text = [_filters labelForRadiusAtIndex:index];
             if (_filters.radius == index) {
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            } else {
+                cell.accessoryType = UITableViewCellAccessoryNone;
             }
-
         }
-    } else if (indexPath.section == 2) {
+    } else if (indexPath.section == SectionDeals) {
         cell = [tableView dequeueReusableCellWithIdentifier:DealsCellIdentifier];
         if (nil == cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:DealsCellIdentifier];
         }
         [self setDealsCell:cell];
-    } else if (indexPath.section == 3) {
-        cell = [tableView dequeueReusableCellWithIdentifier:CategoryCellIdentifier];
+    } else if (indexPath.section == SectionCategories) {
+        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (nil == cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CategoryCellIdentifier];
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         }
         cell.textLabel.text = [_filters.categories objectAtIndex:indexPath.row];
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
@@ -182,13 +178,13 @@ static NSInteger SectionCategories = 3;
         if (indexPath.row > 0) {
             _filters.sort = indexPath.row - 1;
         }
-        [tableView reloadData];
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionSort] withRowAnimation:UITableViewRowAnimationFade];
     } else if (indexPath.section == SectionRadius) {
         self.radiusExpanded = !self.radiusExpanded;
         if (indexPath.row > 0) {
             _filters.radius = indexPath.row - 1;
         }
-        [tableView reloadData];
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionRadius] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
@@ -204,6 +200,14 @@ static NSInteger SectionCategories = 3;
     switchView.on = _filters.offeringDeals;
     [switchView addTarget:self action:@selector(onSwitchDeal:) forControlEvents:UIControlEventValueChanged];
     cell.accessoryView = switchView;
+}
+
+- (void)addMenuAccessoryView:(UITableViewCell *)cell
+{
+    UIImageView *arrowView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"DownArrow"]];
+    arrowView.image = [arrowView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    arrowView.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
+    cell.accessoryView = arrowView;
 }
 
 @end

@@ -18,4 +18,5 @@
 @property (nonatomic, assign) NSInteger radius;
 @property (nonatomic, strong) NSArray *radiusOptions;
 - (NSDictionary *)getParametersWithTerm:(NSString *)term;
+- (NSString *)labelForRadiusAtIndex:(NSInteger)index;
 @end

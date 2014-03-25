@@ -90,11 +90,16 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"BusinessCell" bundle:nil] forCellReuseIdentifier:@"BusinessCell"];
+    
+    // add RefreshControl
+    [self addRefreshControl];
 
     // start search
     [self search];
+}
 
-    // add RefreshControl
+- (void)addRefreshControl
+{
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl addTarget:self action:@selector(search)
              forControlEvents:UIControlEventValueChanged];

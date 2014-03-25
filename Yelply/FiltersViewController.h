@@ -12,11 +12,10 @@
 
 @interface FiltersViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) Filters *filters;
-@property (nonatomic, weak) id delegate;
+@property (nonatomic, weak) id delegate; // TODO: should be id<FiltersSetDelegate>
 @end
 
 @protocol FiltersSetDelegate <NSObject>
-
 - (void)filtersViewController:(FiltersViewController *)filtersViewController
                 didSetFilters:(Filters *)filters;
 @end
