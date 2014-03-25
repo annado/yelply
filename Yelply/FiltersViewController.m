@@ -13,10 +13,12 @@ static NSInteger SectionSort = 0;
 static NSInteger SectionRadius = 1;
 static NSInteger SectionDeals = 2;
 static NSInteger SectionCategories = 3;
+static NSInteger MinCategoriesVisible = 3;
 
 @interface FiltersViewController ()
 @property (nonatomic, assign) BOOL sortExpanded;
 @property (nonatomic, assign) BOOL radiusExpanded;
+@property (nonatomic, assign) BOOL categoriesExpanded;
 @end
 
 @implementation FiltersViewController
@@ -89,7 +91,7 @@ static NSInteger SectionCategories = 3;
 {
     // Return the number of rows in the section.
     if (section == SectionCategories) {
-        return [_filters.categories count];
+        return self.categoriesExpanded ? [_filters.categories count] : (MinCategoriesVisible + 1);
     } else if (section == SectionSort) {
         return (self.sortExpanded) ? (1 + [_filters.sortOptions count]) : 1;
     } else if (section == SectionRadius) {
@@ -143,9 +145,15 @@ static NSInteger SectionCategories = 3;
         cell.textLabel.text = @"Offering a Deal";
         [self addSwitchAccessoryView:cell];
     } else if (indexPath.section == SectionCategories) {
-        cell = [self dequeueReusableCellWithIdentifier:CellIdentifier];
-        cell.textLabel.text = [_filters.categories objectAtIndex:indexPath.row];
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        if (!self.categoriesExpanded && indexPath.row == MinCategoriesVisible) {
+            cell = [self dequeueReusableCellWithIdentifier:DropdownCellIdentifier];
+            cell.textLabel.text = @"See All";
+            [self addMenuAccessoryView:cell];
+        } else {
+            cell = [self dequeueReusableCellWithIdentifier:CellIdentifier];
+            cell.textLabel.text = [_filters.categories objectAtIndex:indexPath.row];
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
     }
     
     return cell;
@@ -186,13 +194,15 @@ static NSInteger SectionCategories = 3;
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionRadius] withRowAnimation:UITableViewRowAnimationFade];
     } else if (indexPath.section == SectionCategories) {
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        self.categoriesExpanded = !self.categoriesExpanded;
         // TODO: implement category selection
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        if (cell.accessoryType == UITableViewCellAccessoryNone) {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        } else {
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        }
+//        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+//        if (cell.accessoryType == UITableViewCellAccessoryNone) {
+//            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+//        } else {
+//            cell.accessoryType = UITableViewCellAccessoryNone;
+//        }
+        [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionCategories] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 
