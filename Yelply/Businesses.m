@@ -28,8 +28,7 @@
 - (Business *)get:(NSUInteger)index
 {
     if (index < [self count]) {
-        NSDictionary *dict = _data[index]; //[_data objectAtIndex:index];
-//        NSLog(@"Business: %@", dict);
+        NSDictionary *dict = _data[index];
         return [[Business alloc] initWithDictionary:dict];
     } else {
         return nil;

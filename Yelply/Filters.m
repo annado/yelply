@@ -48,6 +48,8 @@
                         @"Shopping" : @"shopping"
                         };
         _categories = [[categoryDict allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+
+        // TODO: keep track of selected categories
 //        NSMutableDictionary *selectedCategories = [[NSMutableDictionary alloc] initWithCapacity:[categoryDict count]];
 //        [selectedCategories addEntriesFromDictionary:categoryDict];
         
