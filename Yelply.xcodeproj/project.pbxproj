@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		5807707618DE476B004503E6 /* Filters.m in Sources */ = {isa = PBXBuildFile; fileRef = 5807707518DE476B004503E6 /* Filters.m */; };
-		5807707A18DEBCEA004503E6 /* SearchView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5807707918DEBCEA004503E6 /* SearchView.xib */; };
 		5809E22A18DCFE8600C9F560 /* Businesses.m in Sources */ = {isa = PBXBuildFile; fileRef = 5809E22918DCFE8600C9F560 /* Businesses.m */; };
 		5809E22D18DCFE9000C9F560 /* Business.m in Sources */ = {isa = PBXBuildFile; fileRef = 5809E22C18DCFE9000C9F560 /* Business.m */; };
 		5883A38E18DC18FA008C8AEB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5883A38D18DC18FA008C8AEB /* Foundation.framework */; };
@@ -47,7 +46,6 @@
 		152EEAC19E4640A4B25EF3E7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		5807707418DE476B004503E6 /* Filters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Filters.h; sourceTree = "<group>"; };
 		5807707518DE476B004503E6 /* Filters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Filters.m; sourceTree = "<group>"; };
-		5807707918DEBCEA004503E6 /* SearchView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SearchView.xib; sourceTree = "<group>"; };
 		5809E22818DCFE8600C9F560 /* Businesses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Businesses.h; sourceTree = "<group>"; };
 		5809E22918DCFE8600C9F560 /* Businesses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Businesses.m; sourceTree = "<group>"; };
 		5809E22B18DCFE9000C9F560 /* Business.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Business.h; sourceTree = "<group>"; };
@@ -215,7 +213,6 @@
 				5883A3CD18DC1E08008C8AEB /* BusinessCell.xib */,
 				5883A3C218DC19E1008C8AEB /* BusinessCell.h */,
 				5883A3C318DC19E1008C8AEB /* BusinessCell.m */,
-				5807707918DEBCEA004503E6 /* SearchView.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -308,7 +305,6 @@
 			files = (
 				5883A39818DC18FA008C8AEB /* InfoPlist.strings in Resources */,
 				5883A3A018DC18FA008C8AEB /* Images.xcassets in Resources */,
-				5807707A18DEBCEA004503E6 /* SearchView.xib in Resources */,
 				5883A3CC18DC1CBC008C8AEB /* FiltersViewController.xib in Resources */,
 				5883A3C018DC195F008C8AEB /* SearchResultsViewController.xib in Resources */,
 				5883A3CE18DC1E08008C8AEB /* BusinessCell.xib in Resources */,

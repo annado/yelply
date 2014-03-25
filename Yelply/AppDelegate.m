@@ -15,13 +15,14 @@
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:[[SearchResultsViewController alloc] init]];
-
-    navController.navigationBar.tintColor = [UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1];
+    // global styles
     [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                           [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0], NSFontAttributeName, nil]];
-
+                                                          [UIFont fontWithName:@"HelveticaNeue-Light" size:21.0], NSFontAttributeName, nil]];
+    [[UINavigationBar appearance] setTintColor:[UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1]];
     [[UITableViewCell appearance] setTintColor:[UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1]];
+
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:[[SearchResultsViewController alloc] init]];
     self.window.rootViewController = navController;
 
     self.window.backgroundColor = [UIColor whiteColor];

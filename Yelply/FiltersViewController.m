@@ -60,7 +60,7 @@ static NSInteger SectionCategories = 3;
 #pragma mark - Filter change events
 - (void)onCancel:(UIBarButtonItem *)button
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.delegate filtersViewController:self didSetFilters:nil];
 }
 
 - (void)onSearchButton:(UIBarButtonItem *)button
@@ -162,18 +162,37 @@ static NSInteger SectionCategories = 3;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+
     if (indexPath.section == SectionSort) {
-        self.sortExpanded = !self.sortExpanded;
+        if (indexPath.row > 0) { // not the header row
+            cell.accessoryType = (cell.accessoryType == UITableViewCellAccessoryNone) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        }
+
         if (indexPath.row > 0) {
             _filters.sort = indexPath.row - 1;
         }
+        self.sortExpanded = !self.sortExpanded;
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionSort] withRowAnimation:UITableViewRowAnimationFade];
+
     } else if (indexPath.section == SectionRadius) {
+        if (indexPath.row > 0) { // not the header row
+            cell.accessoryType = (cell.accessoryType == UITableViewCellAccessoryNone) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+        }
         self.radiusExpanded = !self.radiusExpanded;
         if (indexPath.row > 0) {
             _filters.radius = indexPath.row - 1;
         }
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionRadius] withRowAnimation:UITableViewRowAnimationFade];
+    } else if (indexPath.section == SectionCategories) {
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        // TODO: implement category selection
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        if (cell.accessoryType == UITableViewCellAccessoryNone) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
     }
 }
 

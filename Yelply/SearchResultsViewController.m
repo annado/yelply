@@ -78,8 +78,10 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
     FiltersViewController *filtersViewController = [[FiltersViewController alloc] init];
     filtersViewController.filters = _filters;
     filtersViewController.delegate = self;
-    // TODO: use presenting view controller model instead https://developer.apple.com/library/ios/featuredarticles/ViewControllerPGforiPhoneOS/ModalViewControllers/ModalViewControllers.html
-    [self.navigationController pushViewController:filtersViewController animated:YES];
+
+    UINavigationController *navigationController = [[UINavigationController alloc]
+                                                    initWithRootViewController:filtersViewController];
+    [self presentViewController:navigationController animated:YES completion: nil];
 }
 
 - (void)viewDidLoad
@@ -111,9 +113,11 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 - (void)filtersViewController:(FiltersViewController *)filtersViewController
                 didSetFilters:(Filters *)filters
 {
-    _filters = filtersViewController.filters;
-    [self search];
-    [self.navigationController popViewControllerAnimated:YES];
+    if (nil != filters) {
+        _filters = filters;
+        [self search];
+    }
+    [self dismissViewControllerAnimated:YES completion: nil];
 }
 
 
@@ -136,9 +140,9 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-//    MovieViewController *movieController = [[MovieViewController alloc] initWithMovie:movie];
-//    
-//    [[self navigationController] pushViewController:movieController animated:YES];
+    // TODO: Business detail view
+//    BusinessViewController *businessController = [[BusinessViewController alloc] initWithBusiness:business];
+//    [[self navigationController] businessController animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -149,16 +153,8 @@ NSString * const kYelpTokenSecret = @"_Pq3Gdo5rv5laJMWGFkcqBGBK94";
 
 #pragma mark - UISearchBarDelegate methods
 
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
-{
-    NSLog(@"searchBarTextDidEndEditing");
-//    self.searchTerm = searchBar.text;
-//    [self search];
-}
-
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
-    NSLog(@"searchBarSearchButtonClicked");
     [searchBar resignFirstResponder];
     self.searchTerm = searchBar.text;
     [self search];
