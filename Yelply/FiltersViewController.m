@@ -194,15 +194,19 @@ static NSInteger MinCategoriesVisible = 3;
         [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionRadius] withRowAnimation:UITableViewRowAnimationFade];
     } else if (indexPath.section == SectionCategories) {
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
-        self.categoriesExpanded = !self.categoriesExpanded;
-        // TODO: implement category selection
-//        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//        if (cell.accessoryType == UITableViewCellAccessoryNone) {
-//            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-//        } else {
-//            cell.accessoryType = UITableViewCellAccessoryNone;
-//        }
-        [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionCategories] withRowAnimation:UITableViewRowAnimationFade];
+
+        if (!self.categoriesExpanded && indexPath.row == MinCategoriesVisible) {
+            self.categoriesExpanded = !self.categoriesExpanded;
+            [tableView reloadSections:[NSIndexSet indexSetWithIndex:SectionCategories] withRowAnimation:UITableViewRowAnimationFade];
+        } else {
+            // TODO: implement category selection
+            UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            if (cell.accessoryType == UITableViewCellAccessoryNone) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            } else {
+                cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+        }
     }
 }
 
