@@ -7,14 +7,12 @@
 //
 
 #import <AFNetworking/UIImageView+AFNetworking.h>
-//#import <UIKit/NSStringDrawings.h>
 #import "BusinessCell.h"
 #import "Business.h"
 
 @interface BusinessCell ()
 @property (weak, nonatomic) IBOutlet UIImageView *avatarImageView;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *priceLabel;
 @property (weak, nonatomic) IBOutlet UILabel *reviewsLabel;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
 @property (weak, nonatomic) IBOutlet UILabel *categoryLabel;
