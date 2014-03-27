@@ -8,6 +8,7 @@
 
 #import "FiltersViewController.h"
 #import "Filters.h"
+#import "FilterCell.h"
 
 static NSInteger SectionSort = 0;
 static NSInteger SectionRadius = 1;
@@ -48,6 +49,7 @@ static NSInteger MinCategoriesVisible = 3;
     // Setup TableView
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self.tableView registerNib:[UINib nibWithNibName:@"FilterCell" bundle:nil] forCellReuseIdentifier:@"FilterCell"];
     
     // Customize switches
     [[UISwitch appearance] setOnTintColor:[UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1]];
@@ -70,7 +72,7 @@ static NSInteger MinCategoriesVisible = 3;
     [self filtersUpdated];
 }
 
-- (void)onSwitchDeal:(UISwitch *)switchView
+- (void)filterCell:(FilterCell *)filterCell onSwitch:(UISwitch *)switchView
 {
     _filters.offeringDeals = switchView.on;
 }
@@ -103,9 +105,9 @@ static NSInteger MinCategoriesVisible = 3;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    static NSString *FilterIdentifier = @"FilterCell";
     static NSString *CellIdentifier = @"FilterValueCell";
     static NSString *DropdownCellIdentifier = @"FilterDropdownCell";
-    static NSString *SwitchCellIdentifier = @"FilterSwitchCell";
     
     UITableViewCell *cell;
     
@@ -141,9 +143,10 @@ static NSInteger MinCategoriesVisible = 3;
             }
         }
     } else if (indexPath.section == SectionDeals) {
-        cell = [self dequeueReusableCellWithIdentifier:SwitchCellIdentifier];
-        cell.textLabel.text = @"Offering a Deal";
-        [self addSwitchAccessoryView:cell];
+        FilterCell *cell = (FilterCell *)[self.tableView dequeueReusableCellWithIdentifier:FilterIdentifier forIndexPath:indexPath];
+        cell.delegate = self;
+        cell.filters = _filters;
+        return cell;
     } else if (indexPath.section == SectionCategories) {
         if ([self isCategorySeeAllForIndexPath:indexPath]) {
             cell = [self dequeueReusableCellWithIdentifier:DropdownCellIdentifier];
@@ -223,13 +226,6 @@ static NSInteger MinCategoriesVisible = 3;
 }
 
 #pragma mark - Setup cell views
-- (void)addSwitchAccessoryView:(UITableViewCell *)cell
-{
-    UISwitch *switchView = [[UISwitch alloc] init];
-    switchView.on = _filters.offeringDeals;
-    [switchView addTarget:self action:@selector(onSwitchDeal:) forControlEvents:UIControlEventValueChanged];
-    cell.accessoryView = switchView;
-}
 
 - (void)addMenuAccessoryView:(UITableViewCell *)cell
 {
