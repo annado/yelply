@@ -9,6 +9,7 @@
 #import "FiltersViewController.h"
 #import "Filters.h"
 #import "FilterCell.h"
+#import "ToggleMenuCell.h"
 
 static NSInteger SectionSort = 0;
 static NSInteger SectionRadius = 1;
@@ -50,6 +51,7 @@ static NSInteger MinCategoriesVisible = 3;
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerNib:[UINib nibWithNibName:@"FilterCell" bundle:nil] forCellReuseIdentifier:@"FilterCell"];
+    [self.tableView registerNib:[UINib nibWithNibName:@"ToggleMenuCell" bundle:nil] forCellReuseIdentifier:@"ToggleMenuCell"];
     
     // Customize switches
     [[UISwitch appearance] setOnTintColor:[UIColor colorWithRed:(196/255.0f) green:(18/255.0f) blue:0 alpha:1]];
@@ -107,16 +109,16 @@ static NSInteger MinCategoriesVisible = 3;
 {
     static NSString *FilterIdentifier = @"FilterCell";
     static NSString *CellIdentifier = @"FilterValueCell";
-    static NSString *DropdownCellIdentifier = @"FilterDropdownCell";
+    static NSString *DropdownCellIdentifier = @"ToggleMenuCell";
     
     UITableViewCell *cell;
     
     // Configure the cell...
     if (indexPath.section == SectionSort) {
         if (indexPath.row == 0) {
-            cell = [self dequeueReusableCellWithIdentifier:DropdownCellIdentifier];
-            cell.textLabel.text = [_filters.sortOptions objectAtIndex:_filters.sort];
-            [self addMenuAccessoryView:cell];
+            ToggleMenuCell *cell = (ToggleMenuCell *)[self.tableView dequeueReusableCellWithIdentifier:DropdownCellIdentifier forIndexPath:indexPath];
+            cell.nameLabel.text = [_filters.sortOptions objectAtIndex:_filters.sort];
+            return cell;
         } else {
             cell = [self dequeueReusableCellWithIdentifier:CellIdentifier];
             NSInteger index = indexPath.row - 1;
@@ -129,9 +131,9 @@ static NSInteger MinCategoriesVisible = 3;
         }
     } else if (indexPath.section == SectionRadius) {
         if (indexPath.row == 0) {
-            cell = [self dequeueReusableCellWithIdentifier:DropdownCellIdentifier];
-            cell.textLabel.text = [_filters labelForRadiusAtIndex:_filters.radius];
-            [self addMenuAccessoryView:cell];
+            ToggleMenuCell *cell = (ToggleMenuCell *)[self.tableView dequeueReusableCellWithIdentifier:DropdownCellIdentifier forIndexPath:indexPath];
+            cell.nameLabel.text = [_filters labelForRadiusAtIndex:_filters.radius];
+            return cell;
         } else {
             cell = [self dequeueReusableCellWithIdentifier:CellIdentifier];
             NSInteger index = indexPath.row - 1;
@@ -149,9 +151,9 @@ static NSInteger MinCategoriesVisible = 3;
         return cell;
     } else if (indexPath.section == SectionCategories) {
         if ([self isCategorySeeAllForIndexPath:indexPath]) {
-            cell = [self dequeueReusableCellWithIdentifier:DropdownCellIdentifier];
-            cell.textLabel.text = @"See All";
-            [self addMenuAccessoryView:cell];
+            ToggleMenuCell *cell = (ToggleMenuCell *)[self.tableView dequeueReusableCellWithIdentifier:DropdownCellIdentifier forIndexPath:indexPath];
+            cell.nameLabel.text = @"See All";
+            return cell;
         } else {
             cell = [self dequeueReusableCellWithIdentifier:CellIdentifier];
             cell.textLabel.text = [_filters.categories objectAtIndex:indexPath.row];
